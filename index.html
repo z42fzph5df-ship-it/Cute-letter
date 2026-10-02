@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Surprise 💕</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Quicksand:wght@400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #fff0f6, #ffe1ed, #fff7fa);
+    color: #8f4262;
+}
+
+.screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.intro {
+    text-align: center;
+    padding: 25px;
+}
+
+.small-text {
+    font-size: 15px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #b65b7d;
+}
+
+h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 8vw, 58px);
+    font-weight: normal;
+    margin: 0 0 10px;
+    color: #9d4167;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #a75a76;
+    margin-bottom: 35px;
+}
+
+.envelope-area {
+    position: relative;
+    width: 240px;
+    height: 180px;
+    margin: 0 auto;
+}
+
+.envelope {
+    position: absolute;
+    width: 210px;
+    height: 135px;
+    background: #ffd0df;
+    border-radius: 8px;
+    left: 15px;
+    top: 30px;
+    box-shadow: 0 15px 35px rgba(160, 70, 105, 0.18);
+    cursor: pointer;
+    transition: transform 0.25s ease;
+}
+
+.envelope:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #f8b7cd;
+    clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+    border-radius: 8px;
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 105px solid transparent;
+    border-right: 105px solid transparent;
+    border-top: 72px solid #ffe0ea;
+    z-index: 3;
+}
+
+.letter-paper {
+    position: absolute;
+    width: 175px;
+    height: 105px;
+    background: #fffafa;
+    left: 32px;
+    top: 13px;
+    z-index: 2;
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(130, 50, 80, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #b34e73;
+}
+
+.letter-paper span {
+    transform: rotate(-3deg);
+}
+
+.hint {
+    margin-top: 25px;
+    font-size: 13px;
+    color: #bd7792;
+}
+
+.heart {
+    position: absolute;
+    color: #e78aaa;
+    animation: float 4s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-18px) rotate(5deg); }
+}
+
+.flower {
+    position: fixed;
+    font-size: 26px;
+    pointer-events: none;
+    z-index: 20;
+    animation: flowerFly 2.5s forwards ease-out;
+}
+
+@keyframes flowerFly {
+    0% {
+        opacity: 1;
+        transform: translate(0,0) rotate(0deg) scale(0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1.3);
+    }
+}
+
+/* LETTER */
+
+.letter-screen {
+    padding: 25px;
+}
+
+.letter-container {
+    position: relative;
+    width: min(90vw, 620px);
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #fffafc;
+    border: 1px solid #f4ccd9;
+    border-radius: 15px;
+    padding: 45px 35px;
+    box-shadow: 0 25px 60px rgba(140, 60, 90, 0.16);
+    text-align: center;
+}
+
+.corner {
+    position: absolute;
+    font-size: 35px;
+}
+
+.c1 { top: 12px; left: 15px; }
+.c2 { top: 12px; right: 15px; }
+.c3 { bottom: 12px; left: 15px; }
+.c4 { bottom: 12px; right: 15px; }
+
+.letter-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 34px;
+    color: #a7466d;
+    margin-bottom: 25px;
+}
+
+.message {
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.9;
+    color: #805268;
+    white-space: pre-line;
+}
+
+.question {
+    margin-top: 30px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #a7466d;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.answer {
+    border: none;
+    padding: 13px 30px;
+    border-radius: 30px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.answer:hover {
+    transform: translateY(-3px);
+}
+
+.good {
+    background: #f3a7c1;
+    color: white;
+    box-shadow: 0 7px 15px rgba(210, 100, 140, 0.2);
+}
+
+.bad {
+    background: #fff;
+    color: #b05c7b;
+    border: 1px solid #efbfd0;
+}
+
+.final-screen {
+    text-align: center;
+    padding: 25px;
+}
+
+.final-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: #a7466d;
+    margin-bottom: 10px;
+}
+
+.final-screen p {
+    color: #a45d79;
+    font-size: 17px;
+}
+
+.mini-flower {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 500px) {
+    .letter-container {
+        padding: 40px 25px;
+    }
+
+    .letter-title {
+        font-size: 29px;
+    }
+
+    .message {
+        font-size: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FIRST SCREEN -->
+<div class="screen" id="opening">
+
+    <div class="heart" style="left:12%;top:18%;font-size:20px;">♡</div>
+    <div class="heart" style="left:82%;top:25%;font-size:25px;animation-delay:1s;">♡</div>
+    <div class="heart" style="left:15%;top:75%;font-size:17px;animation-delay:2s;">♡</div>
+    <div class="heart" style="left:88%;top:70%;font-size:19px;animation-delay:.5s;">♡</div>
+
+    <div class="intro">
+
+        <div class="small-text">A LITTLE SOMETHING FOR YOU</div>
+
+        <h1>Hey you... ♡</h1>
+
+        <div class="subtitle">
+            I made something. Don't ask questions. Just open it. 🎀
+        </div>
+
+        <div class="envelope-area">
+
+            <div class="envelope" id="envelope">
+                <div class="letter-paper">
+                    <span>Open me ♡</span>
+                </div>
+                <div class="flap"></div>
+            </div>
+
+        </div>
+
+        <div class="hint" id="hint">
+            Try to catch the letter...
+        </div>
+
+    </div>
+</div>
+
+
+<!-- LETTER SCREEN -->
+<div class="screen letter-screen hidden" id="letterScreen">
+
+    <div class="letter-container">
+
+        <div class="corner c1">🌸</div>
+        <div class="corner c2">🎀</div>
+        <div class="corner c3">🌷</div>
+        <div class="corner c4">♡</div>
+
+        <div class="letter-title">
+            A little letter for you 💌
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="question">
+            So... what do you think? 👀
+        </div>
+
+        <div class="buttons">
+            <button class="answer good" onclick="answer('good')">
+                It's good! 💕
+            </button>
+
+            <button class="answer bad" onclick="answer('bad')">
+                It's bad! 😭
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- FINAL SCREEN -->
+<div class="screen hidden" id="finalScreen">
+
+    <div class="final-screen">
+
+        <div class="mini-flower">🌸 🌷 🎀 🌷 🌸</div>
+
+        <h2>Thank you! ♡</h2>
+
+        <p>
+            Thank you for answering my very serious and extremely important question. 😂
+        </p>
+
+        <p>
+            Okay bye now. 💕
+        </p>
+
+        <div class="mini-flower">🌸 ♡ 🌸 ♡ 🌸</div>
+
+    </div>
+</div>
+
+
+<script>
+
+const envelope = document.getElementById("envelope");
+const opening = document.getElementById("opening");
+const letterScreen = document.getElementById("letterScreen");
+const finalScreen = document.getElementById("finalScreen");
+const hint = document.getElementById("hint");
+
+let attempts = 0;
+let audioStarted = false;
+
+
+/* Calm ambient sound using Web Audio API */
+function startAmbientSound() {
+
+    if (audioStarted) return;
+
+    audioStarted = true;
+
+    try {
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContext) return;
+
+        const ctx = new AudioContext();
+
+        const master = ctx.createGain();
+        master.gain.value = 0.035;
+        master.connect(ctx.destination);
+
+        const notes = [261.63, 329.63, 392.00, 329.63];
+
+        notes.forEach((frequency, index) => {
+
+            const oscillator = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            oscillator.type = "sine";
+            oscillator.frequency.value = frequency;
+
+            gain.gain.setValueAtTime(0, ctx.currentTime);
+
+            gain.gain.linearRampToValueAtTime(
+                0.5,
+                ctx.currentTime + 1 + index * 0.2
+            );
+
+            gain.gain.linearRampToValueAtTime(
+                0,
+                ctx.currentTime + 4 + index * 0.2
+            );
+
+            oscillator.connect(gain);
+            gain.connect(master);
+
+            oscillator.start();
+            oscillator.stop(ctx.currentTime + 5);
+        });
+
+    } catch(e) {}
+
+}
+
+
+/* Make envelope move */
+
+function moveEnvelope() {
+
+    startAmbientSound();
+
+    attempts++;
+
+    if (attempts <= 6) {
+
+        const maxX = Math.min(window.innerWidth * 0.28, 130);
+        const maxY = Math.min(window.innerHeight * 0.20, 110);
+
+        const x = (Math.random() * maxX * 2) - maxX;
+        const y = (Math.random() * maxY * 2) - maxY;
+        const rotation = (Math.random() * 20) - 10;
+
+        envelope.style.transform =
+            `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+
+        const messages = [
+            "Nope 😂",
+            "Almost! 💕",
+            "Try again...",
+            "Hehe, not yet 🎀",
+            "You're getting closer!",
+            "Okay okay... one last time 👀"
+        ];
+
+        hint.textContent = messages[attempts - 1];
+
+    } else {
+
+        openEnvelope();
+
+    }
+
+}
+
+
+/* Open envelope */
+
+function openEnvelope() {
+
+    envelope.style.transform = "scale(1.12)";
+
+    hint.textContent = "You caught it! 💌";
+
+    createFlowers();
+
+    setTimeout(() => {
+
+        opening.classList.add("hidden");
+
+        setTimeout(() => {
+
+            letterScreen.classList.remove("hidden");
+
+            typeMessage();
+
+        }, 700);
+
+    }, 1500);
+
+}
+
+
+/* Flowers flying out */
+
+function createFlowers() {
+
+    const flowers = ["🌸","🌷","🌹","🌺","💮","🌼","🎀","♡"];
+
+    for (let i = 0; i < 35; i++) {
+
+        const flower = document.createElement("div");
+
+        flower.className = "flower";
+
+        flower.textContent =
+            flowers[Math.floor(Math.random() * flowers.length)];
+
+        flower.style.left = "50%";
+        flower.style.top = "50%";
+
+        flower.style.setProperty(
+            "--x",
+            `${(Math.random() * 1000) - 500}px`
+        );
+
+        flower.style.setProperty(
+            "--y",
+            `${(Math.random() * 700) - 350}px`
+        );
+
+        flower.style.setProperty(
+            "--r",
+            `${(Math.random() * 720) - 360}deg`
+        );
+
+        flower.style.animationDelay =
+            `${Math.random() * 0.4}s`;
+
+        document.body.appendChild(flower);
+
+        setTimeout(() => flower.remove(), 3200);
+
+    }
+
+}
+
+
+/* Letter typing */
+
+const messageText = `Heyyy! 💕
+
+So... this is literally just me, your best friend. 😂
+
+I was just trying to see how this whole website thing works, and somehow this idea popped into my head...
+
+So I thought, why not make one and send it to you?
+
+I was basically just learning how to make a website, and this was the first thing that came to my mind. So here it is! 🎀
+
+I have absolutely no idea what I'm doing, but I think it turned out kinda cute. 🌸
+
+Anyway, I made this specifically so YOU could be my test subject. Congratulations. 😂💕
+
+Now I need your very honest opinion...`;
+
+function typeMessage() {
+
+    const element = document.getElementById("message");
+
+    let i = 0;
+
+    function type() {
+
+        if (i < messageText.length) {
+
+            element.textContent += messageText.charAt(i);
+
+            i++;
+
+            setTimeout(type, 18);
+
+        }
+
+    }
+
+    type();
+
+}
+
+
+/* Answer */
+
+function answer(choice) {
+
+    createFlowers();
+
+    letterScreen.classList.add("hidden");
+
+    setTimeout(() => {
+
+        finalScreen.classList.remove("hidden");
+
+    }, 700);
+
+}
+
+
+/* Click / touch */
+
+envelope.addEventListener("mouseenter", () => {
+
+    if (attempts < 6) {
+        moveEnvelope();
+    }
+
+});
+
+envelope.addEventListener("click", () => {
+
+    if (attempts < 6) {
+        moveEnvelope();
+    } else {
+        openEnvelope();
+    }
+
+});
+
+envelope.addEventListener("touchstart", (event) => {
+
+    event.preventDefault();
+
+    if (attempts < 6) {
+        moveEnvelope();
+    } else {
+        openEnvelope();
+    }
+
+}, {passive:false});
+
+</script>
+
+</body>
+</html>
